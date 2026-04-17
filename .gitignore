@@ -56,3 +56,4 @@ artifacts/
 
 # Note: .tech-lead-internal/ is intentionally NOT gitignored here.
 # It is stripped from the candidate image via .dockerignore.
+.tech-lead-internal/
