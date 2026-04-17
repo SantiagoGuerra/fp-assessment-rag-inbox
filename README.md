@@ -52,36 +52,42 @@ Your work is evaluated against these six outcomes (AC-1 through AC-6):
 - **AC-6**: `pytest tests/` passes at 100 percent. Coverage on files you
   modify is at least 70 percent.
 
-## Prerequisites
+## How you access this repo
 
-The FP-provided laptop is preconfigured. If you rebuild or run locally:
+The assessment runs on a **remote workspace** that FP provisions for you — a
+browser-based VS Code environment with Docker preinstalled. You do not need
+to install anything on your own machine. You only need:
 
-- Docker Engine 24+ with Compose v2 (`docker compose version` must succeed).
-- 4 CPU cores and 8 GB of RAM free for the container.
-- ~3 GB of free disk (images + pgvector + the embedder model).
-- Outbound HTTPS to `api.anthropic.com`, `pypi.org`, `files.pythonhosted.org`,
-  and `huggingface.co` on first build (the embedder model is cached after).
-- No host Postgres on port 5432 or web server on port 8000.
+- A recent Chromium-based browser or Firefox.
+- A stable internet connection (~5 Mbps down is fine).
+- A working microphone (used during the live-coding phase).
+
+The workspace itself is already sized for this repo: 4 CPU cores, 8 GB RAM,
+Docker 24+, uv, Python 3.12, and outbound access to the package registries
+the build needs (`api.anthropic.com`, `pypi.org`, `huggingface.co`). You will
+not run anything on your local laptop.
 
 ## Setup
 
-One-line setup from a clean clone:
+Open the workspace URL the evaluator shared with you. VS Code loads in your
+browser. Open a terminal inside the workspace (`Terminal → New Terminal`) and
+run the single setup command:
 
 ```bash
 docker compose up --build
 ```
 
-Expected startup time is under 60 seconds on a 4-core, 8 GB laptop on the
-second build (first build downloads the embedder model; add ~1-2 minutes).
-Health check:
+Expected startup time is under 60 seconds on the provisioned workspace on
+subsequent builds (the first build downloads the embedder model; add ~1-2
+minutes). Health check:
 
 ```bash
 curl -s http://localhost:8000/health
 # {"status":"ok"}
 ```
 
-If you prefer to work inside the VS Code devcontainer, open the repository in
-VS Code, accept the "Reopen in Container" prompt, and then run:
+If you prefer to iterate without rebuilding the whole compose stack on every
+change, run the service layer directly:
 
 ```bash
 make setup && make run
@@ -89,8 +95,9 @@ make setup && make run
 
 `make setup` installs the locked Python environment, installs the pre-commit
 hooks, and seeds the 60-ticket fixture into the database. `make run` starts
-the API on port 8000. Run `make test` to execute the test suite and
-`make score-l1` to produce the local scoring artifact `final-l1.json`.
+the API on port 8000 with auto-reload. Run `make test` to execute the test
+suite and `make score-l1` to produce the local scoring artifact
+`final-l1.json`.
 
 ## First five minutes — suggested path
 
@@ -104,14 +111,18 @@ the API on port 8000. Run `make test` to execute the test suite and
 
 ## Troubleshooting
 
-- `docker compose up` hangs on "pulling embedder model" — your network blocks
-  huggingface.co. Tell the evaluator; they will warm the cache for you.
-- Port 8000 or 5432 is in use — stop the conflicting host process or edit
-  `docker-compose.yml`.
-- `make setup` reports a Python version error — run it inside the
-  devcontainer, not the host.
-- `pytest` cannot find modules — you ran it outside the devcontainer; retry
-  inside.
+- `docker compose up` hangs on "pulling embedder model" — the workspace
+  egress to `huggingface.co` is slow or blocked. Tell the evaluator; they
+  will warm the cache.
+- `docker compose up` reports port 8000 or 5432 already in use — a previous
+  run is still active. `docker compose down` and retry.
+- `make setup` reports a Python version error — your `uv` is pointing at the
+  system Python instead of 3.12. Run `uv python install 3.12` and retry.
+- `pytest` cannot import `src.*` — activate the uv environment first
+  (`source .venv/bin/activate`) or prefix with `uv run`.
+- The workspace disconnects or reloads — reconnect from the URL the
+  evaluator shared. Your work is preserved on the remote volume; checkpoints
+  are written every 20 minutes.
 
 If anything blocks you from making progress for more than a few minutes, tell
 the evaluator in chat. Assessment bugs that are ours to fix do not count
@@ -123,13 +134,13 @@ You may use the following assistants during the session:
 
 - **Claude Code CLI** (terminal).
 - **Cline** (VS Code extension).
-- **Inline completions** from approved providers configured by the laptop
-  image (Copilot-style suggestions).
+- **Inline completions** from approved providers that the workspace image
+  configures (Copilot-style suggestions).
 
 External web interfaces are not permitted during the session. That includes
 `chat.openai.com`, `claude.ai`, Gemini chat, and any other browser-based LLM
-UI. All approved tools route through the local LLM proxy on this laptop so
-your prompt and response traffic is captured for later review.
+UI. All approved tools route through the local LLM proxy running inside the
+workspace so your prompt and response traffic is captured for later review.
 
 ## What is observed
 
@@ -138,11 +149,11 @@ your session afterwards. By starting the session you consent to the following.
 
 **Audio and video recorded for the entire live-coding phase:**
 
-- **Screen capture** of the FP laptop, continuous, full session.
-- **Microphone audio**, continuous, full session. Talking through your
-  thought process is encouraged but not required.
+- **Screen capture** of the workspace session, continuous, full phase.
+- **Microphone audio** from your device, continuous, full phase. Talking
+  through your thought process is encouraged but not required.
 
-**Artifacts captured on the laptop:**
+**Artifacts captured inside the workspace:**
 
 - Every 20 minutes a background process writes a checkpoint into
   `/artifacts/checkpoint-<timestamp>/`. A checkpoint contains the current
