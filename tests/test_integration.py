@@ -41,6 +41,4 @@ async def test_happy_path(app_client: AsyncClient) -> None:
     )
     assert resp.status_code == 200
     body: dict[str, Any] = resp.json()
-    # NOTE: baseline asserts exactly one citation is returned. See TASK.md and
-    # docs/SPEC.md for the full acceptance criteria.
     assert len(body["citations"]) == 1

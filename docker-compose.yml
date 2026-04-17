@@ -8,6 +8,9 @@
 #       - api.anthropic.com (443)   — real LLM (only proxy uses this)
 #       - pypi.org / files.pythonhosted.org (443) — python deps at setup
 #       - registry.npmjs.org (443)  — devcontainer extensions
+#       - huggingface.co / cdn-lfs.huggingface.co (443) — embedder model
+#         (sentence-transformers/all-MiniLM-L6-v2). Pre-baked into the image
+#         at build time; only needed if the image is rebuilt offline-first.
 #   Everything else (including github.com during the session) is blocked.
 #   Compose cannot enforce this on its own; operators apply host-level rules
 #   before handing the laptop to the candidate.

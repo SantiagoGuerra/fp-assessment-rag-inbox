@@ -59,7 +59,7 @@ through two primary paths: ingest and query.
    chunk, caching by content hash.
 4. Chunks and vectors are persisted atomically via the async SQLAlchemy
    session in `src/db/session.py`.
-5. The route returns `{ticket_id, chunks_persisted}`.
+5. The route returns `{ticket_id, chunks}`.
 
 ## Query flow
 

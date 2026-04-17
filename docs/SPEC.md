@@ -28,7 +28,7 @@ Accepts a single ticket and persists its embedded chunks.
 ```json
 {
   "ticket_id": "TKT-0001",
-  "chunks_persisted": 3
+  "chunks": 3
 }
 ```
 

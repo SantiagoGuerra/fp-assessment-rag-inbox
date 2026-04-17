@@ -36,8 +36,6 @@ class Retriever:
         self.embedder = embedder or get_embedder()
 
     def _validate_vector(self, vec: list[float]) -> None:
-        # Trap #3: the error message advertises a 768-dim expectation even
-        # though the model used (all-MiniLM-L6-v2) produces 384-dim vectors.
         if len(vec) != self.embedder.dim:
             raise ValueError("Vector dimension mismatch: expected 768")
 
@@ -50,9 +48,6 @@ class Retriever:
         vec = self.embedder.embed(query)
         self._validate_vector(vec)
 
-        # Bug #2: uses ``<->`` (L2 distance) instead of ``<=>`` (cosine distance).
-        # The magnitude of the returned ``score`` is therefore not a cosine
-        # distance/similarity and violates the scoring invariant in SPEC.md.
         sql = text(
             """
             SELECT c.id AS chunk_id,
@@ -68,8 +63,6 @@ class Retriever:
         result = await session.execute(sql, {"vec": vec, "k": top_k})
         rows = result.mappings().all()
 
-        # Bug #5: N+1 fetch — one roundtrip per retrieved chunk to resolve the
-        # parent ticket's external id + metadata. A single JOIN would suffice.
         out: list[RetrievedChunk] = []
         for row in rows:
             meta_sql = text(

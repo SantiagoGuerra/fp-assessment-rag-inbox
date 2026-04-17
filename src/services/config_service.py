@@ -51,11 +51,6 @@ class ConfigService:
         entry = self._cache.get(name)
         if entry is not None:
             age = now - entry.stored_at
-            # Bug #6: ``age`` is in seconds (``time.monotonic()`` returns
-            # seconds) but ``self._ttl_ms`` is in milliseconds. The comparison
-            # treats 3_000 as a seconds threshold, so cache entries live for
-            # roughly 3_000 seconds instead of 3 seconds and flag propagation
-            # far exceeds the 5-second SPEC invariant.
             if age < self._ttl_ms:
                 return entry.value
         value = self._backing.get(name, default)

@@ -87,10 +87,6 @@ class Generator:
             f"[{c.ticket_id} | chunk {c.chunk_index} | score={c.score:.4f}]\n{c.content}"
             for c in chunks
         )
-        # Bug #4: the caller-supplied ``query`` is concatenated into what is
-        # effectively an extended system/context prompt, so adversarial input
-        # such as "ignore previous instructions" is interpreted as operator
-        # guidance rather than untrusted user data.
         header = (
             f"{SYSTEM_PROMPT_BASE}\n\n"
             f"USER QUESTION: {query}\n\n"
@@ -104,9 +100,6 @@ class Generator:
         prompt = self._compose_prompt(query, chunks)
         result = await self._agent.run(prompt, deps=GeneratorDeps(chunks=chunks))
         response = result.output if hasattr(result, "output") else result.data
-        # Bug #3: citations from the LLM are returned verbatim. No validation
-        # against the set of retrieved ticket_ids is performed, so the response
-        # can contain hallucinated ids that don't exist in the database.
         return response
 
 

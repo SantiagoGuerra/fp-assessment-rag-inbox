@@ -44,9 +44,6 @@ def chunk_text(
     n = len(text)
     # Emit windows until the start index passes the end of the text.
     while start < n:
-        # Bug #1: the slice end is one short of chunk_size, so each window is
-        # chunk_size-1 chars and the final character of the text can be lost
-        # when ``(n - start) == chunk_size``.
         end = start + chunk_size - 1
         piece = text[start:end]
         if not piece:

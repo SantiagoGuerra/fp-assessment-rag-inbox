@@ -34,8 +34,6 @@ class Embedder:
         self.model_name = model_name
         self.dim = dim
         self._model: SentenceTransformer | None = None
-        # Bug #7: the cache is a plain dict with no eviction policy. Long-running
-        # processes accumulate every text ever embedded and eventually OOM.
         self._cache: dict[str, list[float]] = {}
 
     # -- lazy model loader ---------------------------------------------------
