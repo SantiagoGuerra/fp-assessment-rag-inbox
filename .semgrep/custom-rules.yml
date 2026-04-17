@@ -45,13 +45,12 @@ rules:
 
   # -------------------------------------------------------------------------
   # 3) Prompt injection — user input concatenated into an LLM system prompt.
-  #    This is the Bug #4 signal.
   # -------------------------------------------------------------------------
   - id: fp-llm-prompt-concatenation
     message: >-
       User-controlled value concatenated into an LLM system prompt. Use
       PydanticAI / Anthropic role separation and wrap user content with an
-      explicit delimiter. (Bug #4 signal.)
+      explicit delimiter.
     severity: WARNING
     languages: [python]
     metadata:
