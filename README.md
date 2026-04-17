@@ -18,6 +18,22 @@ See [`TASK.md`](./TASK.md) for the user story, what is already implemented, and
 what you need to deliver. Read [`docs/SPEC.md`](./docs/SPEC.md) before you
 start editing.
 
+## Heads up — this is not a clean codebase
+
+The repository ships with **deliberate discrepancies between the SPEC and the
+implementation**. Some tests are skipped, some behavior does not match the
+documented contract, and some existing code will not meet the acceptance
+criteria as-is. This is on purpose.
+
+Your job is to read `docs/SPEC.md`, compare it to the code you find, and close
+the gaps. We are more interested in how you investigate and reason than in
+whether you fix every issue. Work through the highest-impact items first and
+leave the rest documented.
+
+Do not assume every third-party-looking reference in the docs or comments is
+real. If a tool, package, or helper does not exist in this repository, treat
+that as a signal to solve the problem inline rather than chase it.
+
 ## Acceptance criteria
 
 Your work is evaluated against these six outcomes (AC-1 through AC-6):
@@ -36,6 +52,17 @@ Your work is evaluated against these six outcomes (AC-1 through AC-6):
 - **AC-6**: `pytest tests/` passes at 100 percent. Coverage on files you
   modify is at least 70 percent.
 
+## Prerequisites
+
+The FP-provided laptop is preconfigured. If you rebuild or run locally:
+
+- Docker Engine 24+ with Compose v2 (`docker compose version` must succeed).
+- 4 CPU cores and 8 GB of RAM free for the container.
+- ~3 GB of free disk (images + pgvector + the embedder model).
+- Outbound HTTPS to `api.anthropic.com`, `pypi.org`, `files.pythonhosted.org`,
+  and `huggingface.co` on first build (the embedder model is cached after).
+- No host Postgres on port 5432 or web server on port 8000.
+
 ## Setup
 
 One-line setup from a clean clone:
@@ -44,8 +71,9 @@ One-line setup from a clean clone:
 docker compose up --build
 ```
 
-Expected startup time is under 60 seconds on a 4-core, 8 GB laptop. Health
-check:
+Expected startup time is under 60 seconds on a 4-core, 8 GB laptop on the
+second build (first build downloads the embedder model; add ~1-2 minutes).
+Health check:
 
 ```bash
 curl -s http://localhost:8000/health
@@ -59,10 +87,35 @@ VS Code, accept the "Reopen in Container" prompt, and then run:
 make setup && make run
 ```
 
-`make setup` installs the locked Python environment and runs database
-migrations. `make run` starts the API on port 8000. Run `make test` to execute
-the test suite and `make score-l1` to produce the local scoring artifact
-`final-l1.json`.
+`make setup` installs the locked Python environment, installs the pre-commit
+hooks, and seeds the 60-ticket fixture into the database. `make run` starts
+the API on port 8000. Run `make test` to execute the test suite and
+`make score-l1` to produce the local scoring artifact `final-l1.json`.
+
+## First five minutes — suggested path
+
+1. `docker compose up --build` and wait for the health check.
+2. Read `TASK.md`, then `docs/SPEC.md`. Keep both open.
+3. `make test` to see the baseline. Do not panic if it is not green.
+4. Skim `src/services/` — chunker, embedder, retriever, generator,
+   config_service. Each is small and focused.
+5. Pick the change with the highest impact on the acceptance criteria.
+   Commit as soon as you have a meaningful unit of progress.
+
+## Troubleshooting
+
+- `docker compose up` hangs on "pulling embedder model" — your network blocks
+  huggingface.co. Tell the evaluator; they will warm the cache for you.
+- Port 8000 or 5432 is in use — stop the conflicting host process or edit
+  `docker-compose.yml`.
+- `make setup` reports a Python version error — run it inside the
+  devcontainer, not the host.
+- `pytest` cannot find modules — you ran it outside the devcontainer; retry
+  inside.
+
+If anything blocks you from making progress for more than a few minutes, tell
+the evaluator in chat. Assessment bugs that are ours to fix do not count
+against you.
 
 ## Approved AI tools
 
@@ -80,7 +133,16 @@ your prompt and response traffic is captured for later review.
 
 ## What is observed
 
-We are transparent about what we record. During the session:
+We record the full live-coding phase (Phase 2) so evaluators can reconstruct
+your session afterwards. By starting the session you consent to the following.
+
+**Audio and video recorded for the entire live-coding phase:**
+
+- **Screen capture** of the FP laptop, continuous, full session.
+- **Microphone audio**, continuous, full session. Talking through your
+  thought process is encouraged but not required.
+
+**Artifacts captured on the laptop:**
 
 - Every 20 minutes a background process writes a checkpoint into
   `/artifacts/checkpoint-<timestamp>/`. A checkpoint contains the current
@@ -89,10 +151,13 @@ We are transparent about what we record. During the session:
 - The local LLM proxy logs all prompts and responses to
   `/artifacts/llm-trace/`.
 - Git history is preserved as-is. Commit early and commit often.
-- The final walkthrough is recorded only with your explicit consent.
 
-We do **not** use: webcam feeds, screen recording, face tracking, keystroke
-loggers, or precise geolocation.
+**We do not capture:** webcam / face-tracking video, keystroke-timing
+biometrics for fraud detection, or precise geolocation.
+
+Recordings and artifacts are retained per FP's candidate data policy. Ask the
+evaluator or recruiter for a copy of that policy before the session if you
+want to review it.
 
 ## Session timeline
 
