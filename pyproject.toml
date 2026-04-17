@@ -42,8 +42,8 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
 
-# NOTE: `uv lock` must be run during the Docker build to materialise uv.lock.
-# We do not check it in from local dev because infra owns the reproducible build pipeline.
+# NOTE: `uv.lock` IS committed for reproducibility. The Dockerfile prefers
+# `uv sync --frozen` and falls back to `uv sync` if the lock is missing.
 
 [tool.pytest.ini_options]
 minversion = "8.0"

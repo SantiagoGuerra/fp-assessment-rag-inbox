@@ -24,6 +24,7 @@ from __future__ import annotations
 import json
 import os
 import time
+from collections import deque
 from pathlib import Path
 from threading import Lock
 from typing import Any
@@ -32,6 +33,14 @@ import httpx
 import yaml
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
+
+# Harden file creation: trace + budget files must not be world-readable
+# (RNF-06 — checkpoint/proxy data stays confined to the checkpoint UID).
+os.umask(0o077)
+
+# Request hardening caps.
+MAX_BODY_BYTES = 256 * 1024  # 256 KB — refuse anything larger.
+RATE_LIMIT_PER_MIN = 60  # per-key requests per rolling 60s window.
 
 # ---------------------------------------------------------------------------
 # Configuration — env overrides YAML overrides defaults.
@@ -117,10 +126,31 @@ def _trace(entry: dict[str, Any]) -> None:
         h.write(json.dumps(entry, default=str) + "\n")
 
 
-def _validate_candidate_key(headers) -> None:
+def _validate_candidate_key(headers) -> str:
     key = headers.get("x-api-key", "")
     if not key.startswith(CFG["fake_key_prefix"]):
         raise HTTPException(status_code=401, detail="invalid api key")
+    return key
+
+
+# Simple in-memory per-key rolling-window rate limiter.
+_rate_buckets: dict[str, deque[float]] = {}
+_rate_lock = Lock()
+
+
+def _check_rate(key: str) -> None:
+    now = time.monotonic()
+    window = 60.0
+    with _rate_lock:
+        bucket = _rate_buckets.setdefault(key, deque())
+        while bucket and now - bucket[0] > window:
+            bucket.popleft()
+        if len(bucket) >= RATE_LIMIT_PER_MIN:
+            raise HTTPException(
+                status_code=429,
+                detail=f"rate limit: {RATE_LIMIT_PER_MIN} req/min per key",
+            )
+        bucket.append(now)
 
 
 def _check_budget() -> float:
@@ -157,14 +187,22 @@ async def health() -> dict[str, Any]:
 @app.post("/v1/messages")
 async def messages(request: Request) -> JSONResponse:
     """Anthropic Messages API v1 compatible endpoint."""
-    _validate_candidate_key(request.headers)
+    key = _validate_candidate_key(request.headers)
+    _check_rate(key)
     if not REAL_KEY:
         raise HTTPException(status_code=503, detail="proxy not configured: missing ANTHROPIC_API_KEY_REAL")
+
+    # Reject oversized bodies before reading them fully.
+    cl = request.headers.get("content-length")
+    if cl and cl.isdigit() and int(cl) > MAX_BODY_BYTES:
+        raise HTTPException(status_code=413, detail=f"body > {MAX_BODY_BYTES} bytes")
 
     with _state_lock:
         _check_budget()
 
     body_bytes = await request.body()
+    if len(body_bytes) > MAX_BODY_BYTES:
+        raise HTTPException(status_code=413, detail=f"body > {MAX_BODY_BYTES} bytes")
     try:
         payload = json.loads(body_bytes or b"{}")
     except json.JSONDecodeError as e:
@@ -216,10 +254,16 @@ async def messages(request: Request) -> JSONResponse:
 @app.post("/v1/messages/count_tokens")
 async def count_tokens(request: Request) -> JSONResponse:
     """Pass-through for token counting — does not affect budget."""
-    _validate_candidate_key(request.headers)
+    key = _validate_candidate_key(request.headers)
+    _check_rate(key)
     if not REAL_KEY:
         raise HTTPException(status_code=503, detail="proxy not configured")
+    cl = request.headers.get("content-length")
+    if cl and cl.isdigit() and int(cl) > MAX_BODY_BYTES:
+        raise HTTPException(status_code=413, detail=f"body > {MAX_BODY_BYTES} bytes")
     body = await request.body()
+    if len(body) > MAX_BODY_BYTES:
+        raise HTTPException(status_code=413, detail=f"body > {MAX_BODY_BYTES} bytes")
     headers = {
         "x-api-key": REAL_KEY,
         "anthropic-version": request.headers.get("anthropic-version", "2023-06-01"),
