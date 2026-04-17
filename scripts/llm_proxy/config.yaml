@@ -1,0 +1,33 @@
+# ---------------------------------------------------------------------------
+# LLM proxy configuration.
+# Env vars override these values (see scripts/llm_proxy/proxy.py::_load_config).
+# ---------------------------------------------------------------------------
+
+upstream_url: "https://api.anthropic.com"
+
+# Per-candidate-session USD ceiling (RF-402).
+budget_usd: 2.00
+
+# Anything the candidate sends whose `x-api-key` starts with this prefix is
+# accepted. The proxy rewrites the header with the real key before upstream.
+fake_key_prefix: "fp-proxy-key-local"
+
+# Persistent state and trace output (RF-403).
+state_file: "/artifacts/llm-budget.json"
+trace_dir:  "/artifacts/llm-trace"
+session_id: "default"
+
+# USD per 1M tokens. Update when pricing changes.
+pricing:
+  claude-3-5-sonnet:
+    input: 3.00
+    output: 15.00
+  claude-3-5-haiku:
+    input: 0.80
+    output: 4.00
+  claude-3-opus:
+    input: 15.00
+    output: 75.00
+  default:
+    input: 3.00
+    output: 15.00

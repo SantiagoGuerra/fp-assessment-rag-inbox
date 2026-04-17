@@ -1,0 +1,30 @@
+# ---------------------------------------------------------------------------
+# pre-commit hooks (RF-015). Installed via `make setup`.
+# Kept deliberately minimal — heavier checks live in `make ci-local`.
+# ---------------------------------------------------------------------------
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks
+        name: gitleaks protect (staged)
+        entry: gitleaks protect --staged --redact --config .gitleaks.toml
+        language: golang
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        name: ruff check
+        args: ["--fix"]
+      - id: ruff-format
+        name: ruff format (check only)
+        args: ["--check"]
+
+  - repo: local
+    hooks:
+      - id: no-internal-docs
+        name: block .tech-lead-internal/ from being committed
+        entry: bash -c 'if git diff --cached --name-only | grep -q "^.tech-lead-internal/"; then echo "ERROR: .tech-lead-internal/ must not be committed"; exit 1; fi'
+        language: system
+        pass_filenames: false

@@ -1,0 +1,83 @@
+# ---------------------------------------------------------------------------
+# Custom Semgrep rules for fp-assessment-rag-inbox.
+# These target the planted bugs and anti-traps so L1 scoring can flag blind-AI
+# patches that reintroduce them.
+# ---------------------------------------------------------------------------
+rules:
+  # -------------------------------------------------------------------------
+  # 1) SQL injection via string formatting / concatenation.
+  # -------------------------------------------------------------------------
+  - id: fp-sql-string-format
+    message: >-
+      Possible SQL injection: SQL text built via f-string / .format() / +.
+      Use SQLAlchemy text(...) with bound parameters or an ORM query.
+    severity: ERROR
+    languages: [python]
+    metadata:
+      category: security
+      cwe: "CWE-89"
+    patterns:
+      - pattern-either:
+          - pattern: $CONN.execute(f"... {$X} ...")
+          - pattern: $CONN.execute("... {} ...".format(...))
+          - pattern: $CONN.execute("..." + $X + "...")
+          - pattern: session.execute(f"... {$X} ...")
+          - pattern: await $CONN.execute(f"... {$X} ...")
+
+  # -------------------------------------------------------------------------
+  # 2) eval / exec on anything that could be user input.
+  # -------------------------------------------------------------------------
+  - id: fp-eval-exec-user-input
+    message: >-
+      `eval` / `exec` called on a value that may be user-controlled. This is
+      RCE-prone. Use `ast.literal_eval` for constants or a proper parser.
+    severity: ERROR
+    languages: [python]
+    metadata:
+      category: security
+      cwe: "CWE-95"
+    patterns:
+      - pattern-either:
+          - pattern: eval($X)
+          - pattern: exec($X)
+      - pattern-not: eval("...")
+      - pattern-not: exec("...")
+
+  # -------------------------------------------------------------------------
+  # 3) Prompt injection — user input concatenated into an LLM system prompt.
+  #    This is the Bug #4 signal.
+  # -------------------------------------------------------------------------
+  - id: fp-llm-prompt-concatenation
+    message: >-
+      User-controlled value concatenated into an LLM system prompt. Use
+      PydanticAI / Anthropic role separation and wrap user content with an
+      explicit delimiter. (Bug #4 signal.)
+    severity: WARNING
+    languages: [python]
+    metadata:
+      category: security
+      cwe: "CWE-77"
+    patterns:
+      - pattern-either:
+          - pattern: |
+              system_prompt = f"... {$USER} ..."
+          - pattern: |
+              $SYSTEM = "..." + $USER + "..."
+          - pattern: |
+              Agent(..., system_prompt=f"... {$USER} ...")
+          - pattern: |
+              Agent(..., system_prompt="..." + $USER + "...")
+
+  # -------------------------------------------------------------------------
+  # 4) Committed Anthropic API keys.
+  # -------------------------------------------------------------------------
+  - id: fp-anthropic-key-hardcoded
+    message: >-
+      Hardcoded Anthropic API key. Never commit real keys — use env vars and
+      the LLM proxy (`fp-proxy-key-local`).
+    severity: ERROR
+    languages: [python, generic]
+    metadata:
+      category: security
+      cwe: "CWE-798"
+    pattern-regex: "sk-ant-(api03|admin)[A-Za-z0-9_\\-]{20,}"

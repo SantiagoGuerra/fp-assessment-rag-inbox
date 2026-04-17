@@ -1,0 +1,32 @@
+line-length = 100
+target-version = "py312"
+
+extend-exclude = [
+    ".venv",
+    "build",
+    "dist",
+    ".tech-lead-internal",
+]
+
+[lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",  # line length handled elsewhere
+    "B008",  # fastapi Depends()
+]
+
+[lint.per-file-ignores]
+"tests/*" = ["B", "SIM"]
+"src/main.py" = ["E402"]
+
+[format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"

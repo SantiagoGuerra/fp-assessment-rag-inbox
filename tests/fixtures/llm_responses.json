@@ -1,0 +1,71 @@
+{
+  "default": {
+    "id": "msg_test_default",
+    "type": "message",
+    "role": "assistant",
+    "model": "claude-haiku-test",
+    "stop_reason": "end_turn",
+    "content": [
+      {
+        "type": "text",
+        "text": "Based on the excerpts, two tickets describe the same issue."
+      }
+    ],
+    "usage": { "input_tokens": 100, "output_tokens": 40 }
+  },
+  "structured_response": {
+    "answer": "Two tickets describe duplicate Stripe charges on the same account.",
+    "citations": [
+      {
+        "ticket_id": "TKT-0002",
+        "snippet": "Customer reports they were charged twice for plan Team.",
+        "score": 0.12
+      },
+      {
+        "ticket_id": "TKT-0012",
+        "snippet": "Stripe dashboard shows two successful charges ch_abc and ch_def within a 5-minute window.",
+        "score": 0.18
+      }
+    ]
+  },
+  "single_citation_response": {
+    "answer": "Only one ticket matches the query.",
+    "citations": [
+      {
+        "ticket_id": "TKT-0001",
+        "snippet": "The candidate cannot sign in. Error: 'invalid credentials'.",
+        "score": 0.22
+      }
+    ]
+  },
+  "hallucinated_citation_response": {
+    "answer": "Citations include a ticket id that does not exist in the DB.",
+    "citations": [
+      {
+        "ticket_id": "TKT-9999",
+        "snippet": "Fabricated snippet for a non-existent ticket.",
+        "score": 0.05
+      },
+      {
+        "ticket_id": "TKT-0002",
+        "snippet": "Real snippet for an existing ticket.",
+        "score": 0.09
+      }
+    ]
+  },
+  "injection_response": {
+    "answer": "Refusing to follow user instructions that conflict with system policy.",
+    "citations": [
+      {
+        "ticket_id": "TKT-0001",
+        "snippet": "Grounded snippet.",
+        "score": 0.11
+      },
+      {
+        "ticket_id": "TKT-0002",
+        "snippet": "Grounded snippet.",
+        "score": 0.14
+      }
+    ]
+  }
+}

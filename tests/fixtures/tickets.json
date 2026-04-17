@@ -1,0 +1,782 @@
+[
+  {
+    "ticket_id": "TKT-0001",
+    "title": "[LOGIN] The candidate cannot sign in",
+    "body": "The candidate cannot sign in. Error: 'invalid credentials'. Reset link did not arrive. They tried incognito. They tried a different browser. They tried mobile. Screenshot attached. Browser: Chrome 134. OS: macOS 15.2. Additional context for TKT-0001: the customer is on plan Pro and signed up on 2025-02-02.",
+    "metadata": {
+      "created_at": "2026-04-02T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "auth",
+        "login"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0002",
+    "title": "[BILLING] Customer reports they were charged twice for plan Team",
+    "body": "Customer reports they were charged twice for plan Team. Stripe dashboard shows two successful charges ch_abc and ch_def within a 5-minute window. Requesting refund on the duplicate. Their invoice email is broken too \u2014 PDF attachment 0 bytes. Additional context for TKT-0002: the customer is on plan Pro and signed up on 2025-03-03. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-03T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "billing",
+        "stripe"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0003",
+    "title": "[FEATURE_REQUEST] Would like webhook deliveries to include a signed HMAC header so we can verify o",
+    "body": "Would like webhook deliveries to include a signed HMAC header so we can verify origin. Today only the payload is sent. Suggested header name X-FP-Signature-SHA256 with the raw body signed using the project's webhook secret. Additional context for TKT-0003: the customer is on plan Pro and signed up on 2025-04-04.",
+    "metadata": {
+      "created_at": "2026-04-04T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "feature",
+        "webhooks"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0004",
+    "title": "[BUG] CSV export returns an empty file when the date range exceeds 30 days",
+    "body": "CSV export returns an empty file when the date range exceeds 30 days. Expected rows: ~2M. Works fine for 7 days. Stack trace in Sentry points to `streaming_writer` running out of memory, but the frontend quietly downloads a 0-byte file. Additional context for TKT-0004: the customer is on plan Pro and signed up on 2025-05-05. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-05T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "bug",
+        "export"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0005",
+    "title": "[INTEGRATION] Slack integration posts duplicate messages in the #alerts channel whenever there",
+    "body": "Slack integration posts duplicate messages in the #alerts channel whenever there is a retry. Expected: exactly-once with idempotency key honored. Seen 3 identical alerts for incident INC-9213. Slack webhook URL redacted. Additional context for TKT-0005: the customer is on plan Pro and signed up on 2025-06-06.",
+    "metadata": {
+      "created_at": "2026-04-06T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "integration",
+        "slack"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0006",
+    "title": "[PERF] The /api/reports endpoint has p95 latency >4s during peak",
+    "body": "The /api/reports endpoint has p95 latency >4s during peak. Database CPU graph attached. We believe the N+1 query over `report_items` is the culprit. Please join instead of looping. Additional context for TKT-0006: the customer is on plan Pro and signed up on 2025-07-07. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-07T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "performance",
+        "latency"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0007",
+    "title": "[SECURITY] SOC2 auditor flagged that our session cookies do not set SameSite=Lax",
+    "body": "SOC2 auditor flagged that our session cookies do not set SameSite=Lax. We should also rotate the JWT signing key quarterly. Attaching audit finding #44. Additional context for TKT-0007: the customer is on plan Pro and signed up on 2025-08-08.",
+    "metadata": {
+      "created_at": "2026-04-08T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "security",
+        "audit"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0008",
+    "title": "[DOCS] Typo on the Quickstart page: 'recieve' should be 'receive'",
+    "body": "Typo on the Quickstart page: 'recieve' should be 'receive'. Also the curl example uses `POST` on an endpoint that actually requires `PUT`. Example response body is out of date since the v2 migration. Additional context for TKT-0008: the customer is on plan Pro and signed up on 2025-09-09. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-09T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "docs",
+        "typo"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0009",
+    "title": "[MOBILE] iOS app crashes on launch for users on iOS 18",
+    "body": "iOS app crashes on launch for users on iOS 18.3. Firebase Crashlytics shows NSInvalidArgumentException originating from the analytics SDK. Repro rate ~12%. Fresh install works; upgrades crash. Additional context for TKT-0009: the customer is on plan Pro and signed up on 2025-10-10. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error.",
+    "metadata": {
+      "created_at": "2026-04-10T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "mobile",
+        "ios"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0010",
+    "title": "[ONBOARDING] New users get stuck on the 'connect your data source' step because the list only",
+    "body": "New users get stuck on the 'connect your data source' step because the list only renders one provider. Expected: Postgres, MySQL, Snowflake, BigQuery all visible. The provider list is gated behind a feature flag that is off by default. Additional context for TKT-0010: the customer is on plan Pro and signed up on 2025-11-11. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-11T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "onboarding",
+        "ux"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0011",
+    "title": "[LOGIN] The candidate cannot sign in",
+    "body": "The candidate cannot sign in. Error: 'invalid credentials'. Reset link did not arrive. They tried incognito. They tried a different browser. They tried mobile. Screenshot attached. Browser: Chrome 134. OS: macOS 15.2. Additional context for TKT-0011: the customer is on plan Pro and signed up on 2025-12-12.",
+    "metadata": {
+      "created_at": "2026-04-12T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "auth",
+        "login"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0012",
+    "title": "[BILLING] Customer reports they were charged twice for plan Team",
+    "body": "Customer reports they were charged twice for plan Team. Stripe dashboard shows two successful charges ch_abc and ch_def within a 5-minute window. Requesting refund on the duplicate. Their invoice email is broken too \u2014 PDF attachment 0 bytes. Additional context for TKT-0012: the customer is on plan Pro and signed up on 2025-01-13. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-13T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "billing",
+        "stripe"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0013",
+    "title": "[FEATURE_REQUEST] Would like webhook deliveries to include a signed HMAC header so we can verify o",
+    "body": "Would like webhook deliveries to include a signed HMAC header so we can verify origin. Today only the payload is sent. Suggested header name X-FP-Signature-SHA256 with the raw body signed using the project's webhook secret. Additional context for TKT-0013: the customer is on plan Pro and signed up on 2025-02-14.",
+    "metadata": {
+      "created_at": "2026-04-14T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "feature",
+        "webhooks"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0014",
+    "title": "[BUG] CSV export returns an empty file when the date range exceeds 30 days",
+    "body": "CSV export returns an empty file when the date range exceeds 30 days. Expected rows: ~2M. Works fine for 7 days. Stack trace in Sentry points to `streaming_writer` running out of memory, but the frontend quietly downloads a 0-byte file. Additional context for TKT-0014: the customer is on plan Pro and signed up on 2025-03-15. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-15T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "bug",
+        "export"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0015",
+    "title": "[INTEGRATION] Slack integration posts duplicate messages in the #alerts channel whenever there",
+    "body": "Slack integration posts duplicate messages in the #alerts channel whenever there is a retry. Expected: exactly-once with idempotency key honored. Seen 3 identical alerts for incident INC-9213. Slack webhook URL redacted. Additional context for TKT-0015: the customer is on plan Pro and signed up on 2025-04-16.",
+    "metadata": {
+      "created_at": "2026-04-16T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "integration",
+        "slack"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0016",
+    "title": "[PERF] The /api/reports endpoint has p95 latency >4s during peak",
+    "body": "The /api/reports endpoint has p95 latency >4s during peak. Database CPU graph attached. We believe the N+1 query over `report_items` is the culprit. Please join instead of looping. Additional context for TKT-0016: the customer is on plan Pro and signed up on 2025-05-17. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-17T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "performance",
+        "latency"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0017",
+    "title": "[SECURITY] SOC2 auditor flagged that our session cookies do not set SameSite=Lax",
+    "body": "SOC2 auditor flagged that our session cookies do not set SameSite=Lax. We should also rotate the JWT signing key quarterly. Attaching audit finding #44. Additional context for TKT-0017: the customer is on plan Pro and signed up on 2025-06-18.",
+    "metadata": {
+      "created_at": "2026-04-18T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "security",
+        "audit"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0018",
+    "title": "[DOCS] Typo on the Quickstart page: 'recieve' should be 'receive'",
+    "body": "Typo on the Quickstart page: 'recieve' should be 'receive'. Also the curl example uses `POST` on an endpoint that actually requires `PUT`. Example response body is out of date since the v2 migration. Additional context for TKT-0018: the customer is on plan Pro and signed up on 2025-07-19. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error.",
+    "metadata": {
+      "created_at": "2026-04-19T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "docs",
+        "typo"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0019",
+    "title": "[MOBILE] iOS app crashes on launch for users on iOS 18",
+    "body": "iOS app crashes on launch for users on iOS 18.3. Firebase Crashlytics shows NSInvalidArgumentException originating from the analytics SDK. Repro rate ~12%. Fresh install works; upgrades crash. Additional context for TKT-0019: the customer is on plan Pro and signed up on 2025-08-20.",
+    "metadata": {
+      "created_at": "2026-04-20T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "mobile",
+        "ios"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0020",
+    "title": "[ONBOARDING] New users get stuck on the 'connect your data source' step because the list only",
+    "body": "New users get stuck on the 'connect your data source' step because the list only renders one provider. Expected: Postgres, MySQL, Snowflake, BigQuery all visible. The provider list is gated behind a feature flag that is off by default. Additional context for TKT-0020: the customer is on plan Pro and signed up on 2025-09-21. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-21T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "onboarding",
+        "ux"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0021",
+    "title": "[LOGIN] The candidate cannot sign in",
+    "body": "The candidate cannot sign in. Error: 'invalid credentials'. Reset link did not arrive. They tried incognito. They tried a different browser. They tried mobile. Screenshot attached. Browser: Chrome 134. OS: macOS 15.2. Additional context for TKT-0021: the customer is on plan Pro and signed up on 2025-10-22.",
+    "metadata": {
+      "created_at": "2026-04-22T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "auth",
+        "login"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0022",
+    "title": "[BILLING] Customer reports they were charged twice for plan Team",
+    "body": "Customer reports they were charged twice for plan Team. Stripe dashboard shows two successful charges ch_abc and ch_def within a 5-minute window. Requesting refund on the duplicate. Their invoice email is broken too \u2014 PDF attachment 0 bytes. Additional context for TKT-0022: the customer is on plan Pro and signed up on 2025-11-23. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-23T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "billing",
+        "stripe"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0023",
+    "title": "[FEATURE_REQUEST] Would like webhook deliveries to include a signed HMAC header so we can verify o",
+    "body": "Would like webhook deliveries to include a signed HMAC header so we can verify origin. Today only the payload is sent. Suggested header name X-FP-Signature-SHA256 with the raw body signed using the project's webhook secret. Additional context for TKT-0023: the customer is on plan Pro and signed up on 2025-12-24.",
+    "metadata": {
+      "created_at": "2026-04-24T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "feature",
+        "webhooks"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0024",
+    "title": "[BUG] CSV export returns an empty file when the date range exceeds 30 days",
+    "body": "CSV export returns an empty file when the date range exceeds 30 days. Expected rows: ~2M. Works fine for 7 days. Stack trace in Sentry points to `streaming_writer` running out of memory, but the frontend quietly downloads a 0-byte file. Additional context for TKT-0024: the customer is on plan Pro and signed up on 2025-01-25. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-25T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "bug",
+        "export"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0025",
+    "title": "[INTEGRATION] Slack integration posts duplicate messages in the #alerts channel whenever there",
+    "body": "Slack integration posts duplicate messages in the #alerts channel whenever there is a retry. Expected: exactly-once with idempotency key honored. Seen 3 identical alerts for incident INC-9213. Slack webhook URL redacted. Additional context for TKT-0025: the customer is on plan Pro and signed up on 2025-02-26.",
+    "metadata": {
+      "created_at": "2026-04-26T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "integration",
+        "slack"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0026",
+    "title": "[PERF] The /api/reports endpoint has p95 latency >4s during peak",
+    "body": "The /api/reports endpoint has p95 latency >4s during peak. Database CPU graph attached. We believe the N+1 query over `report_items` is the culprit. Please join instead of looping. Additional context for TKT-0026: the customer is on plan Pro and signed up on 2025-03-27. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-27T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "performance",
+        "latency"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0027",
+    "title": "[SECURITY] SOC2 auditor flagged that our session cookies do not set SameSite=Lax",
+    "body": "SOC2 auditor flagged that our session cookies do not set SameSite=Lax. We should also rotate the JWT signing key quarterly. Attaching audit finding #44. Additional context for TKT-0027: the customer is on plan Pro and signed up on 2025-04-01. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error.",
+    "metadata": {
+      "created_at": "2026-04-28T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "security",
+        "audit"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0028",
+    "title": "[DOCS] Typo on the Quickstart page: 'recieve' should be 'receive'",
+    "body": "Typo on the Quickstart page: 'recieve' should be 'receive'. Also the curl example uses `POST` on an endpoint that actually requires `PUT`. Example response body is out of date since the v2 migration. Additional context for TKT-0028: the customer is on plan Pro and signed up on 2025-05-02. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-01T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "docs",
+        "typo"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0029",
+    "title": "[MOBILE] iOS app crashes on launch for users on iOS 18",
+    "body": "iOS app crashes on launch for users on iOS 18.3. Firebase Crashlytics shows NSInvalidArgumentException originating from the analytics SDK. Repro rate ~12%. Fresh install works; upgrades crash. Additional context for TKT-0029: the customer is on plan Pro and signed up on 2025-06-03.",
+    "metadata": {
+      "created_at": "2026-04-02T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "mobile",
+        "ios"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0030",
+    "title": "[ONBOARDING] New users get stuck on the 'connect your data source' step because the list only",
+    "body": "New users get stuck on the 'connect your data source' step because the list only renders one provider. Expected: Postgres, MySQL, Snowflake, BigQuery all visible. The provider list is gated behind a feature flag that is off by default. Additional context for TKT-0030: the customer is on plan Pro and signed up on 2025-07-04. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-03T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "onboarding",
+        "ux"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0031",
+    "title": "[LOGIN] The candidate cannot sign in",
+    "body": "The candidate cannot sign in. Error: 'invalid credentials'. Reset link did not arrive. They tried incognito. They tried a different browser. They tried mobile. Screenshot attached. Browser: Chrome 134. OS: macOS 15.2. Additional context for TKT-0031: the customer is on plan Pro and signed up on 2025-08-05.",
+    "metadata": {
+      "created_at": "2026-04-04T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "auth",
+        "login"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0032",
+    "title": "[BILLING] Customer reports they were charged twice for plan Team",
+    "body": "Customer reports they were charged twice for plan Team. Stripe dashboard shows two successful charges ch_abc and ch_def within a 5-minute window. Requesting refund on the duplicate. Their invoice email is broken too \u2014 PDF attachment 0 bytes. Additional context for TKT-0032: the customer is on plan Pro and signed up on 2025-09-06. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-05T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "billing",
+        "stripe"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0033",
+    "title": "[FEATURE_REQUEST] Would like webhook deliveries to include a signed HMAC header so we can verify o",
+    "body": "Would like webhook deliveries to include a signed HMAC header so we can verify origin. Today only the payload is sent. Suggested header name X-FP-Signature-SHA256 with the raw body signed using the project's webhook secret. Additional context for TKT-0033: the customer is on plan Pro and signed up on 2025-10-07.",
+    "metadata": {
+      "created_at": "2026-04-06T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "feature",
+        "webhooks"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0034",
+    "title": "[BUG] CSV export returns an empty file when the date range exceeds 30 days",
+    "body": "CSV export returns an empty file when the date range exceeds 30 days. Expected rows: ~2M. Works fine for 7 days. Stack trace in Sentry points to `streaming_writer` running out of memory, but the frontend quietly downloads a 0-byte file. Additional context for TKT-0034: the customer is on plan Pro and signed up on 2025-11-08. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-07T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "bug",
+        "export"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0035",
+    "title": "[INTEGRATION] Slack integration posts duplicate messages in the #alerts channel whenever there",
+    "body": "Slack integration posts duplicate messages in the #alerts channel whenever there is a retry. Expected: exactly-once with idempotency key honored. Seen 3 identical alerts for incident INC-9213. Slack webhook URL redacted. Additional context for TKT-0035: the customer is on plan Pro and signed up on 2025-12-09.",
+    "metadata": {
+      "created_at": "2026-04-08T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "integration",
+        "slack"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0036",
+    "title": "[PERF] The /api/reports endpoint has p95 latency >4s during peak",
+    "body": "The /api/reports endpoint has p95 latency >4s during peak. Database CPU graph attached. We believe the N+1 query over `report_items` is the culprit. Please join instead of looping. Additional context for TKT-0036: the customer is on plan Pro and signed up on 2025-01-10. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error.",
+    "metadata": {
+      "created_at": "2026-04-09T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "performance",
+        "latency"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0037",
+    "title": "[SECURITY] SOC2 auditor flagged that our session cookies do not set SameSite=Lax",
+    "body": "SOC2 auditor flagged that our session cookies do not set SameSite=Lax. We should also rotate the JWT signing key quarterly. Attaching audit finding #44. Additional context for TKT-0037: the customer is on plan Pro and signed up on 2025-02-11.",
+    "metadata": {
+      "created_at": "2026-04-10T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "security",
+        "audit"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0038",
+    "title": "[DOCS] Typo on the Quickstart page: 'recieve' should be 'receive'",
+    "body": "Typo on the Quickstart page: 'recieve' should be 'receive'. Also the curl example uses `POST` on an endpoint that actually requires `PUT`. Example response body is out of date since the v2 migration. Additional context for TKT-0038: the customer is on plan Pro and signed up on 2025-03-12. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-11T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "docs",
+        "typo"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0039",
+    "title": "[MOBILE] iOS app crashes on launch for users on iOS 18",
+    "body": "iOS app crashes on launch for users on iOS 18.3. Firebase Crashlytics shows NSInvalidArgumentException originating from the analytics SDK. Repro rate ~12%. Fresh install works; upgrades crash. Additional context for TKT-0039: the customer is on plan Pro and signed up on 2025-04-13.",
+    "metadata": {
+      "created_at": "2026-04-12T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "mobile",
+        "ios"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0040",
+    "title": "[ONBOARDING] New users get stuck on the 'connect your data source' step because the list only",
+    "body": "New users get stuck on the 'connect your data source' step because the list only renders one provider. Expected: Postgres, MySQL, Snowflake, BigQuery all visible. The provider list is gated behind a feature flag that is off by default. Additional context for TKT-0040: the customer is on plan Pro and signed up on 2025-05-14. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-13T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "onboarding",
+        "ux"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0041",
+    "title": "[LOGIN] The candidate cannot sign in",
+    "body": "The candidate cannot sign in. Error: 'invalid credentials'. Reset link did not arrive. They tried incognito. They tried a different browser. They tried mobile. Screenshot attached. Browser: Chrome 134. OS: macOS 15.2. Additional context for TKT-0041: the customer is on plan Pro and signed up on 2025-06-15.",
+    "metadata": {
+      "created_at": "2026-04-14T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "auth",
+        "login"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0042",
+    "title": "[BILLING] Customer reports they were charged twice for plan Team",
+    "body": "Customer reports they were charged twice for plan Team. Stripe dashboard shows two successful charges ch_abc and ch_def within a 5-minute window. Requesting refund on the duplicate. Their invoice email is broken too \u2014 PDF attachment 0 bytes. Additional context for TKT-0042: the customer is on plan Pro and signed up on 2025-07-16. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-15T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "billing",
+        "stripe"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0043",
+    "title": "[FEATURE_REQUEST] Would like webhook deliveries to include a signed HMAC header so we can verify o",
+    "body": "Would like webhook deliveries to include a signed HMAC header so we can verify origin. Today only the payload is sent. Suggested header name X-FP-Signature-SHA256 with the raw body signed using the project's webhook secret. Additional context for TKT-0043: the customer is on plan Pro and signed up on 2025-08-17.",
+    "metadata": {
+      "created_at": "2026-04-16T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "feature",
+        "webhooks"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0044",
+    "title": "[BUG] CSV export returns an empty file when the date range exceeds 30 days",
+    "body": "CSV export returns an empty file when the date range exceeds 30 days. Expected rows: ~2M. Works fine for 7 days. Stack trace in Sentry points to `streaming_writer` running out of memory, but the frontend quietly downloads a 0-byte file. Additional context for TKT-0044: the customer is on plan Pro and signed up on 2025-09-18. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-17T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "bug",
+        "export"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0045",
+    "title": "[INTEGRATION] Slack integration posts duplicate messages in the #alerts channel whenever there",
+    "body": "Slack integration posts duplicate messages in the #alerts channel whenever there is a retry. Expected: exactly-once with idempotency key honored. Seen 3 identical alerts for incident INC-9213. Slack webhook URL redacted. Additional context for TKT-0045: the customer is on plan Pro and signed up on 2025-10-19. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error.",
+    "metadata": {
+      "created_at": "2026-04-18T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "integration",
+        "slack"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0046",
+    "title": "[PERF] The /api/reports endpoint has p95 latency >4s during peak",
+    "body": "The /api/reports endpoint has p95 latency >4s during peak. Database CPU graph attached. We believe the N+1 query over `report_items` is the culprit. Please join instead of looping. Additional context for TKT-0046: the customer is on plan Pro and signed up on 2025-11-20. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-19T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "performance",
+        "latency"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0047",
+    "title": "[SECURITY] SOC2 auditor flagged that our session cookies do not set SameSite=Lax",
+    "body": "SOC2 auditor flagged that our session cookies do not set SameSite=Lax. We should also rotate the JWT signing key quarterly. Attaching audit finding #44. Additional context for TKT-0047: the customer is on plan Pro and signed up on 2025-12-21.",
+    "metadata": {
+      "created_at": "2026-04-20T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "security",
+        "audit"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0048",
+    "title": "[DOCS] Typo on the Quickstart page: 'recieve' should be 'receive'",
+    "body": "Typo on the Quickstart page: 'recieve' should be 'receive'. Also the curl example uses `POST` on an endpoint that actually requires `PUT`. Example response body is out of date since the v2 migration. Additional context for TKT-0048: the customer is on plan Pro and signed up on 2025-01-22. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-21T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "docs",
+        "typo"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0049",
+    "title": "[MOBILE] iOS app crashes on launch for users on iOS 18",
+    "body": "iOS app crashes on launch for users on iOS 18.3. Firebase Crashlytics shows NSInvalidArgumentException originating from the analytics SDK. Repro rate ~12%. Fresh install works; upgrades crash. Additional context for TKT-0049: the customer is on plan Pro and signed up on 2025-02-23.",
+    "metadata": {
+      "created_at": "2026-04-22T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "mobile",
+        "ios"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0050",
+    "title": "[ONBOARDING] New users get stuck on the 'connect your data source' step because the list only",
+    "body": "New users get stuck on the 'connect your data source' step because the list only renders one provider. Expected: Postgres, MySQL, Snowflake, BigQuery all visible. The provider list is gated behind a feature flag that is off by default. Additional context for TKT-0050: the customer is on plan Pro and signed up on 2025-03-24. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-23T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "onboarding",
+        "ux"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0051",
+    "title": "[LOGIN] The candidate cannot sign in",
+    "body": "The candidate cannot sign in. Error: 'invalid credentials'. Reset link did not arrive. They tried incognito. They tried a different browser. They tried mobile. Screenshot attached. Browser: Chrome 134. OS: macOS 15.2. Additional context for TKT-0051: the customer is on plan Pro and signed up on 2025-04-25.",
+    "metadata": {
+      "created_at": "2026-04-24T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "auth",
+        "login"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0052",
+    "title": "[BILLING] Customer reports they were charged twice for plan Team",
+    "body": "Customer reports they were charged twice for plan Team. Stripe dashboard shows two successful charges ch_abc and ch_def within a 5-minute window. Requesting refund on the duplicate. Their invoice email is broken too \u2014 PDF attachment 0 bytes. Additional context for TKT-0052: the customer is on plan Pro and signed up on 2025-05-26. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-25T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "billing",
+        "stripe"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0053",
+    "title": "[FEATURE_REQUEST] Would like webhook deliveries to include a signed HMAC header so we can verify o",
+    "body": "Would like webhook deliveries to include a signed HMAC header so we can verify origin. Today only the payload is sent. Suggested header name X-FP-Signature-SHA256 with the raw body signed using the project's webhook secret. Additional context for TKT-0053: the customer is on plan Pro and signed up on 2025-06-27.",
+    "metadata": {
+      "created_at": "2026-04-26T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "feature",
+        "webhooks"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0054",
+    "title": "[BUG] CSV export returns an empty file when the date range exceeds 30 days",
+    "body": "CSV export returns an empty file when the date range exceeds 30 days. Expected rows: ~2M. Works fine for 7 days. Stack trace in Sentry points to `streaming_writer` running out of memory, but the frontend quietly downloads a 0-byte file. Additional context for TKT-0054: the customer is on plan Pro and signed up on 2025-07-01. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error. Repro steps: 1) Sign in. 2) Navigate to settings. 3) Click the button. 4) Observe the error.",
+    "metadata": {
+      "created_at": "2026-04-27T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "bug",
+        "export"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0055",
+    "title": "[INTEGRATION] Slack integration posts duplicate messages in the #alerts channel whenever there",
+    "body": "Slack integration posts duplicate messages in the #alerts channel whenever there is a retry. Expected: exactly-once with idempotency key honored. Seen 3 identical alerts for incident INC-9213. Slack webhook URL redacted. Additional context for TKT-0055: the customer is on plan Pro and signed up on 2025-08-02.",
+    "metadata": {
+      "created_at": "2026-04-28T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "integration",
+        "slack"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0056",
+    "title": "[PERF] The /api/reports endpoint has p95 latency >4s during peak",
+    "body": "The /api/reports endpoint has p95 latency >4s during peak. Database CPU graph attached. We believe the N+1 query over `report_items` is the culprit. Please join instead of looping. Additional context for TKT-0056: the customer is on plan Pro and signed up on 2025-09-03. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-01T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "performance",
+        "latency"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0057",
+    "title": "[SECURITY] SOC2 auditor flagged that our session cookies do not set SameSite=Lax",
+    "body": "SOC2 auditor flagged that our session cookies do not set SameSite=Lax. We should also rotate the JWT signing key quarterly. Attaching audit finding #44. Additional context for TKT-0057: the customer is on plan Pro and signed up on 2025-10-04.",
+    "metadata": {
+      "created_at": "2026-04-02T12:00:00Z",
+      "priority": "high",
+      "tags": [
+        "security",
+        "audit"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0058",
+    "title": "[DOCS] Typo on the Quickstart page: 'recieve' should be 'receive'",
+    "body": "Typo on the Quickstart page: 'recieve' should be 'receive'. Also the curl example uses `POST` on an endpoint that actually requires `PUT`. Example response body is out of date since the v2 migration. Additional context for TKT-0058: the customer is on plan Pro and signed up on 2025-11-05. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-03T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "docs",
+        "typo"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0059",
+    "title": "[MOBILE] iOS app crashes on launch for users on iOS 18",
+    "body": "iOS app crashes on launch for users on iOS 18.3. Firebase Crashlytics shows NSInvalidArgumentException originating from the analytics SDK. Repro rate ~12%. Fresh install works; upgrades crash. Additional context for TKT-0059: the customer is on plan Pro and signed up on 2025-12-06.",
+    "metadata": {
+      "created_at": "2026-04-04T12:00:00Z",
+      "priority": "medium",
+      "tags": [
+        "mobile",
+        "ios"
+      ]
+    }
+  },
+  {
+    "ticket_id": "TKT-0060",
+    "title": "[ONBOARDING] New users get stuck on the 'connect your data source' step because the list only",
+    "body": "New users get stuck on the 'connect your data source' step because the list only renders one provider. Expected: Postgres, MySQL, Snowflake, BigQuery all visible. The provider list is gated behind a feature flag that is off by default. Additional context for TKT-0060: the customer is on plan Pro and signed up on 2025-01-07. They also mentioned that the rate of occurrence has been increasing week over week, and the impact is severe for their Q2 reporting cycle. Please treat as urgent and coordinate with the on-call rotation.",
+    "metadata": {
+      "created_at": "2026-04-05T12:00:00Z",
+      "priority": "low",
+      "tags": [
+        "onboarding",
+        "ux"
+      ]
+    }
+  }
+]

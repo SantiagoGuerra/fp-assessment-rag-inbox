@@ -1,0 +1,66 @@
+# ---------------------------------------------------------------------------
+# .dockerignore — keep the build context small AND ensure no internal
+# evaluator material ever ends up inside the candidate image.
+# ---------------------------------------------------------------------------
+
+# Internal FP docs — MUST NOT ship to candidate.
+.tech-lead-internal/
+fp-assessment-internal/
+
+# Git & VCS
+.git/
+.gitattributes
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.json
+htmlcov/
+.tox/
+.nox/
+*.egg-info/
+dist/
+build/
+
+# Reports (regenerated per run)
+semgrep-report.json
+bandit-report.json
+gitleaks-report.json
+final-l1.json
+
+# Artifacts (mounted as a volume, not baked in)
+artifacts/
+.assessment-artifacts/
+
+# Editor / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Node-ish (in case any tool drops it)
+node_modules/
+
+# Env files — never bake secrets in.
+.env
+.env.*
+!.env.example
+
+# Docker meta
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker-compose.*.yml

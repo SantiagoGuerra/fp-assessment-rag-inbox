@@ -1,0 +1,110 @@
+# ---------------------------------------------------------------------------
+# fp-assessment-rag-inbox — local session compose.
+#
+# NETWORK ALLOWLIST (RNF-07, informational):
+#   In production the candidate host MUST enforce an egress allowlist via
+#   iptables / nftables / macvlan such that only these destinations are
+#   reachable from inside the container network:
+#       - api.anthropic.com (443)   — real LLM (only proxy uses this)
+#       - pypi.org / files.pythonhosted.org (443) — python deps at setup
+#       - registry.npmjs.org (443)  — devcontainer extensions
+#   Everything else (including github.com during the session) is blocked.
+#   Compose cannot enforce this on its own; operators apply host-level rules
+#   before handing the laptop to the candidate.
+#
+# KEY ISOLATION (RNF-05):
+#   The real key is ANTHROPIC_API_KEY_REAL on the host. It is mapped into
+#   the `llm-proxy` service only. The candidate-facing `app` service sees
+#   only ANTHROPIC_API_KEY=fp-proxy-key-local (the fake token) and points
+#   its base URL at http://llm-proxy:8001.
+# ---------------------------------------------------------------------------
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: rag
+      POSTGRES_PASSWORD: rag
+      POSTGRES_DB: rag
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/db-init.sql:/docker-entrypoint-initdb.d/00-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rag -d rag"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://rag:rag@db:5432/rag
+      # The candidate sees ONLY the fake key. The proxy rewrites it.
+      ANTHROPIC_API_KEY: fp-proxy-key-local
+      ANTHROPIC_BASE_URL: http://llm-proxy:8001
+      LLM_PROXY_URL: http://llm-proxy:8001
+      PYTHONPATH: /work
+    volumes:
+      - ./:/work
+      - artifacts:/artifacts:ro   # candidate can READ artefacts only
+    ports:
+      - "8000:8000"
+    command: ["app"]
+    restart: unless-stopped
+
+  llm-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    # Runs as `checkpoint` UID (2000) so the candidate process cannot peek
+    # into /proc/<pid>/environ of the proxy.
+    user: "2000:2000"
+    environment:
+      # REAL key — only this service ever sees it (RNF-05).
+      ANTHROPIC_API_KEY_REAL: ${ANTHROPIC_API_KEY_REAL:-}
+      FP_PROXY_FAKE_KEY: fp-proxy-key-local
+      FP_PROXY_BUDGET_USD: "2.00"
+      FP_PROXY_STATE_FILE: /artifacts/llm-budget.json
+      FP_PROXY_TRACE_DIR: /artifacts/llm-trace
+      FP_PROXY_SESSION_ID: ${FP_PROXY_SESSION_ID:-default}
+      PYTHONPATH: /work
+    volumes:
+      - ./:/work:ro
+      - artifacts:/artifacts   # proxy WRITES trace + budget here
+    ports:
+      - "8001:8001"
+    command: ["llm-proxy"]
+    restart: unless-stopped
+
+  checkpoint:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - app
+    user: "2000:2000"
+    environment:
+      CHECKPOINT_LOOP: "1"
+      CHECKPOINT_INTERVAL_SECONDS: "1200"   # 20 min (RF-301)
+      WORKDIR: /work
+      ARTIFACTS_DIR: /artifacts
+    volumes:
+      - ./:/work:ro
+      - artifacts:/artifacts   # checkpoint WRITES checkpoints here
+    command: ["checkpoint"]
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  artifacts:

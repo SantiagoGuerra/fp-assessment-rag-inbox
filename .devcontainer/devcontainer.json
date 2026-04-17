@@ -1,0 +1,43 @@
+{
+  "name": "fp-assessment-rag-inbox",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/work",
+  "remoteUser": "candidate",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [8000, 8001, 5432],
+  "portsAttributes": {
+    "8000": { "label": "FastAPI (rag)", "onAutoForward": "notify" },
+    "8001": { "label": "LLM proxy",     "onAutoForward": "silent" },
+    "5432": { "label": "Postgres",      "onAutoForward": "silent" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "ms-azuretools.vscode-docker",
+        "saoudrizwan.claude-dev",
+        "anthropic.claude-code"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.testing.pytestEnabled": true,
+        "editor.formatOnSave": true,
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff"
+        },
+        "files.exclude": {
+          "**/.tech-lead-internal": true
+        }
+      }
+    }
+  },
+  "postCreateCommand": "bash -lc 'make setup || true'",
+  "remoteEnv": {
+    "ANTHROPIC_API_KEY": "fp-proxy-key-local",
+    "ANTHROPIC_BASE_URL": "http://llm-proxy:8001",
+    "PYTHONPATH": "/work"
+  }
+}

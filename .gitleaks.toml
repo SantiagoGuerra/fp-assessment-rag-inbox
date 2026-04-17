@@ -1,0 +1,35 @@
+# ---------------------------------------------------------------------------
+# gitleaks configuration for fp-assessment-rag-inbox.
+# Inherits the default ruleset (generic AWS/GCP/etc keys) and adds an
+# Anthropic-specific rule because the assessment uses Claude.
+# ---------------------------------------------------------------------------
+
+title = "fp-assessment-rag-inbox gitleaks config"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id          = "anthropic-api-key"
+description = "Anthropic API key (sk-ant-...)"
+regex       = '''sk-ant-(api03|admin)[A-Za-z0-9_\-]{20,}'''
+tags        = ["key", "anthropic", "assessment"]
+
+[[rules]]
+id          = "openai-api-key"
+description = "OpenAI API key (belt-and-braces; candidates occasionally paste these)"
+regex       = '''sk-(proj-)?[A-Za-z0-9]{20,}'''
+tags        = ["key", "openai", "assessment"]
+
+[allowlist]
+description = "assessment allowlist"
+# The fake candidate-facing key is intentionally present in source — do not
+# flag it.
+regexes = [
+  '''fp-proxy-key-local.*''',
+]
+paths = [
+  '''\.tech-lead-internal/.*''',
+  '''tests/fixtures/llm_responses\.json''',
+  '''scripts/llm_proxy/config\.yaml''',
+]

@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+build/
+dist/
+wheels/
+pip-wheel-metadata/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test and coverage artifacts
+.pytest_cache/
+.coverage
+coverage.json
+htmlcov/
+.tox/
+.cache/
+
+# Tool reports
+final-l1.json
+*-report.json
+semgrep-report.json
+bandit-report.json
+gitleaks-report.json
+ruff-report.json
+
+# Session artifacts
+artifacts/
+.claude/sessions/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Editor and OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+*.swp
+*.swo
+
+# uv / pip
+.uv-cache/
+
+# Note: .tech-lead-internal/ is intentionally NOT gitignored here.
+# It is stripped from the candidate image via .dockerignore.
